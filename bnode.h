@@ -165,7 +165,13 @@ void addRight(BNode <T>* pNode, T&& t)
 template <class T>
 void clear(BNode <T> * & pThis)
 {
-    pThis = nullptr;
+	if (pThis) // if pThis is not already nothing, delete it all
+    {
+        clear(pThis->pLeft);
+        clear(pThis->pRight);
+        delete pThis;
+        pThis = nullptr;
+    }
 }
 
 /***********************************************
@@ -176,8 +182,9 @@ void clear(BNode <T> * & pThis)
 template <class T>
 inline void swap(BNode <T>*& pLHS, BNode <T>*& pRHS)
 {
-    pRHS = nullptr;
-    pLHS = nullptr;
+    BNode<T>* tempSwaper = pLHS;
+    pLHS = pRHS;
+    pRHS = tempSwaper;
 }
 
 /**********************************************
@@ -188,7 +195,20 @@ inline void swap(BNode <T>*& pLHS, BNode <T>*& pRHS)
 template <class T>
 BNode <T> * copy(const BNode <T> * pSrc)
 {
-    return 0;
+    if (!pSrc) // check empty first always
+        return nullptr;
+
+    BNode<T>* pCopy = new BNode<T>(pSrc->data);
+
+    pCopy->pLeft = copy(pSrc->pLeft); // copy left
+    if (pCopy->pLeft)
+        pCopy->pLeft->pParent = pCopy;
+
+	pCopy->pRight = copy(pSrc->pRight); // copy right
+    if (pCopy->pRight)
+        pCopy->pRight->pParent = pCopy;
+
+	return pCopy; // send back the copy
 }
 
 /**********************************************
