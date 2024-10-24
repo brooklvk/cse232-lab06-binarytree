@@ -22,6 +22,7 @@
     <ClCompile Include="testBNode.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\100bnode.h" />
     <ClInclude Include="bnode.h" />
     <ClInclude Include="testBNode.h" />
     <ClInclude Include="unitTest.h" />

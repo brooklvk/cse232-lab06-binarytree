@@ -15,7 +15,7 @@
  *        BNode         : A class representing a BNode
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    Joshua and Brooklyn
+ *    Joshua Sooaemalelagi and Brooklyn Sowards,
  ************************************************************************/
 
 #pragma once
@@ -35,16 +35,23 @@ public:
    // 
    // Construct
    //
-   BNode() : data(0), pLeft(nullptr), pRight(nullptr), pParent(nullptr) {}
 
-   BNode(const T& t) : data(0), pLeft(nullptr), pRight(nullptr), pParent(nullptr)
-   {
-      
-   }
-   BNode(T&& t) : data(0), pLeft(nullptr), pRight(nullptr), pParent(nullptr)
-   {
-      
-   }
+
+    /*
+	* data wasnt init, changed pointers from this to a nullptr.
+    */
+    BNode()
+		: data(T()), pLeft(nullptr), pRight(nullptr), pParent(nullptr)
+    {
+    }
+    BNode(const T& t)
+        : data(t), pLeft(nullptr), pRight(nullptr), pParent(nullptr)
+    {
+    }
+    BNode(T&& t)
+        : data(std::move(t)), pLeft(nullptr), pRight(nullptr), pParent(nullptr)
+    {
+    }
 
    //
    // Data
@@ -60,9 +67,11 @@ public:
  * Return the size of a b-tree under the current node
  *******************************************************************/
 template <class T>
-inline size_t size(const BNode <T> * p)
+inline size_t size(const BNode <T>* p)
 {
-   return 0;
+    if (!p)
+        return 0;
+    return 1 + size(p->pLeft) + size(p->pRight);
 }
 
 
@@ -71,9 +80,14 @@ inline size_t size(const BNode <T> * p)
  * Add a node to the left of the current node
  ******************************************************/
 template <class T>
-inline void addLeft(BNode <T> * pNode, BNode <T> * pAdd)
+inline void addLeft(BNode <T>* pNode, BNode <T>* pAdd)
 {
-
+    if (pNode)
+    {
+        pNode->pLeft = pAdd;
+        if (pAdd)
+            pAdd->pParent = pNode;
+    }
 }
 
 /******************************************************
@@ -81,9 +95,14 @@ inline void addLeft(BNode <T> * pNode, BNode <T> * pAdd)
  * Add a node to the right of the current node
  ******************************************************/
 template <class T>
-inline void addRight (BNode <T> * pNode, BNode <T> * pAdd)
+inline void addRight(BNode <T>* pNode, BNode <T>* pAdd)
 {
-
+    if (pNode)
+    {
+        pNode->pRight = pAdd;
+        if (pAdd)
+            pAdd->pParent = pNode;
+    }
 }
 
 /******************************************************
@@ -91,15 +110,25 @@ inline void addRight (BNode <T> * pNode, BNode <T> * pAdd)
  * Add a node to the left of the current node
  ******************************************************/
 template <class T>
-inline void addLeft (BNode <T> * pNode, const T & t)
+inline void addLeft(BNode <T>* pNode, const T& t)
 {
-
+    if (pNode)
+    {
+        BNode<T>* pAdd = new BNode<T>(t);
+        pNode->pLeft = pAdd;
+        pAdd->pParent = pNode;
+    }
 }
 
 template <class T>
-inline void addLeft(BNode <T>* pNode, T && t)
+inline void addLeft(BNode <T>* pNode, T&& t)
 {
-
+    if (pNode)
+    {
+        BNode<T>* pAdd = new BNode<T>(std::move(t));
+        pNode->pLeft = pAdd;
+        pAdd->pParent = pNode;
+    }
 }
 
 /******************************************************
@@ -107,15 +136,25 @@ inline void addLeft(BNode <T>* pNode, T && t)
  * Add a node to the right of the current node
  ******************************************************/
 template <class T>
-void addRight (BNode <T> * pNode, const T & t)
+void addRight(BNode <T>* pNode, const T& t)
 {
-
+    if (pNode)
+    {
+        BNode<T>* pAdd = new BNode<T>(t);
+        pNode->pRight = pAdd;
+        pAdd->pParent = pNode;
+    }
 }
 
 template <class T>
-void addRight(BNode <T>* pNode, T && t)
+void addRight(BNode <T>* pNode, T&& t)
 {
-
+    if (pNode)
+    {
+        BNode<T>* pAdd = new BNode<T>(std::move(t));
+        pNode->pRight = pAdd;
+        pAdd->pParent = pNode;
+    }
 }
 
 /*****************************************************
