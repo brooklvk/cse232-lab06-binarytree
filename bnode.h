@@ -15,7 +15,7 @@
  *        BNode         : A class representing a BNode
  *    Additionally, it will contain a few functions working on Node
  * Author
- *    <your names here>
+ *    Joshua and Brooklyn
  ************************************************************************/
 
 #pragma once
@@ -35,17 +35,15 @@ public:
    // 
    // Construct
    //
-   BNode()
+   BNode() : data(0), pLeft(nullptr), pRight(nullptr), pParent(nullptr) {}
+
+   BNode(const T& t) : data(0), pLeft(nullptr), pRight(nullptr), pParent(nullptr)
    {
-      pLeft = pRight = this;
+      
    }
-   BNode(const T& t)
+   BNode(T&& t) : data(0), pLeft(nullptr), pRight(nullptr), pParent(nullptr)
    {
-      pLeft = pRight = this;
-   }
-   BNode(T&& t)
-   {
-      pLeft = pRight = this;
+      
    }
 
    //
@@ -64,7 +62,7 @@ public:
 template <class T>
 inline size_t size(const BNode <T> * p)
 {
-   return 99;
+   return 0;
 }
 
 
@@ -128,7 +126,7 @@ void addRight(BNode <T>* pNode, T && t)
 template <class T>
 void clear(BNode <T> * & pThis)
 {
-
+    pThis = nullptr;
 }
 
 /***********************************************
@@ -139,7 +137,8 @@ void clear(BNode <T> * & pThis)
 template <class T>
 inline void swap(BNode <T>*& pLHS, BNode <T>*& pRHS)
 {
-
+    pRHS = nullptr;
+    pLHS = nullptr;
 }
 
 /**********************************************
@@ -150,7 +149,7 @@ inline void swap(BNode <T>*& pLHS, BNode <T>*& pRHS)
 template <class T>
 BNode <T> * copy(const BNode <T> * pSrc)
 {
-   return new BNode<T>;
+    return 0;
 }
 
 /**********************************************
@@ -161,5 +160,35 @@ BNode <T> * copy(const BNode <T> * pSrc)
 template <class T>
 void assign(BNode <T> * & pDest, const BNode <T>* pSrc)
 {
+    // If source is empty just clear the destination 
+    if (pSrc == nullptr)
+    {
+        clear(pDest);
+        pDest = nullptr;
+        return;
+    }
 
+    // If source is not empty 
+
+    // Create a destination if there is none
+    if (pDest == nullptr)
+    {
+        pDest = new BNode<T>;
+    }
+
+    // Assign data 
+    pDest->data = pSrc->data;
+
+    //Debugging 
+    std::cout << "Assigning node with data: " << pDest->data << std::endl;
+
+    // Recursively assign
+    assign(pDest->pLeft, pSrc->pLeft);
+    assign(pDest->pRight, pSrc->pRight);
+
+    // Pointer to parent 
+    if (pDest->pRight != nullptr)
+        pDest->pRight->pParent = pDest;
+    if (pDest->pLeft != nullptr)
+        pDest->pLeft->pParent = pDest;
 }
